@@ -24,7 +24,7 @@ Route::post('actionLogin', [LoginController::class, 'actionLogin'])->name('actio
 // ==========================================
 Route::middleware('auth')->group(function () {
 
-    // Rute Spesifik / Umum untuk Semua Role Terautentikasi
+    // Rute Umum untuk Semua Role Terautentikasi
     Route::get('menu/sidebar', [MenuController::class, 'sidebar']);
     Route::get('order/{id}/print', [OrderController::class, 'printReceipt'])->name('order.print');
     Route::get('setting', [SettingController::class, 'index'])->name('setting');
@@ -36,7 +36,6 @@ Route::middleware('auth')->group(function () {
     // --------------------------------------
     Route::middleware('admin')->group(function () {
         Route::get('admin/dashboard', [DashboardController::class, 'indexAdmin'])->name('admin.dashboard');
-        Route::resource('role', RoleController::class);
         Route::resource('category', CategoryController::class);
         Route::resource('product', ProductController::class);
         Route::resource('menu', MenuController::class);
@@ -47,17 +46,21 @@ Route::middleware('auth')->group(function () {
     // --------------------------------------
     Route::middleware('kasir')->group(function () {
         Route::get('cashier/dashboard', [DashboardController::class, 'indexKasir'])->name('cashier.dashboard');
-        // FIX: Menghapus kelebihan huruf 'r' pada OrderController
         Route::resource('order', OrderController::class);
     });
 
     // --------------------------------------
-    // HAK AKSES PIMPINAN
+    // HAK AKSES MANAGER / PIMPINAN
     // --------------------------------------
-    // FIX: Format array middleware ['pimpinan']
     Route::middleware('pimpinan')->group(function () {
         Route::get('pimpinan/dashboard', [DashboardController::class, 'index'])->name('pimpinan.dashboard');
     });
+
+    // --------------------------------------
+    // AKSES BERSAMA (ADMIN & MANAGER)
+    // --------------------------------------
+    // Dipindahkan ke grup auth umum agar Admin dan Manager bisa mengelola Role
+    Route::resource('role', RoleController::class);
 });
 
 // ==========================================

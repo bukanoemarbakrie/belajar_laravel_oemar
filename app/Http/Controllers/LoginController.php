@@ -24,12 +24,13 @@ class LoginController extends Controller
         if (Auth::attempt($credentials)) {
             $request->session()->regenerate();
             $user = Auth::user();
+
             if ($user->role_id == 1) {
                 return redirect()->intended('/admin/dashboard');
             } else if ($user->role_id == 2) {
                 return redirect()->intended('/cashier/dashboard');
-            } else {
-                return redirect()->intended('/dashboard');
+            } else if ($user->role_id == 3) {
+                return redirect()->intended('/pimpinan/dashboard');
             }
         }
 

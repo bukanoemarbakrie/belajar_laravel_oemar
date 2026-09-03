@@ -163,29 +163,100 @@
 
 <body>
     <!-- Sidebar -->
+    <!-- Sidebar -->
     <aside class="sidebar">
-        <div class="sidebar-brand">AdminPanel</div>
+        <div class="sidebar-brand">
+            @if (Auth::user()->role_id == 3)
+            ManagerPanel
+            @elseif (Auth::user()->role_id == 2)
+            CashierPanel
+            @else
+            AdminPanel
+            @endif
+        </div>
         <ul class="sidebar-menu">
             @if (Auth::user()->role_id == 3)
-            {{-- Menu Pimpinan --}}
-            <li><a href="{{ url('pimpinan/dashboard') }}" class="{{ request()->is('pimpinan/dashboard') ? 'active' : '' }}">Dashboard</a></li>
+            {{-- ========================================== --}}
+            {{-- 1. MENU MANAGER / PIMPINAN                --}}
+            {{-- ========================================== --}}
+            <li>
+                <a href="{{ url('pimpinan/dashboard') }}" class="{{ request()->is('pimpinan/dashboard') ? 'active' : '' }}">
+                    Dashboard
+                </a>
+            </li>
+            <li>
+                <a href="{{ route('setting') }}" class="{{ request()->is('setting*') ? 'active' : '' }}">
+                    Setting
+                </a>
+            </li>
+            <li>
+                <a href="{{ url('role') }}" class="{{ request()->is('role*') ? 'active' : '' }}">
+                    Role
+                </a>
+            </li>
+            <li>
+                <a href="#" onclick="event.preventDefault(); document.getElementById('logout').submit();">
+                    Logout
+                </a>
+            </li>
+
             @elseif (Auth::user()->role_id == 2)
-            {{-- Menu Kasir --}}
-            <li><a href="{{ url('cashier/dashboard') }}" class="{{ request()->is('cashier/dashboard') ? 'active' : '' }}">Dashboard</a></li>
-            <li><a href="{{ url('order') }}" class="{{ request()->is('order*') ? 'active' : '' }}">Order</a></li>
+            {{-- ========================================== --}}
+            {{-- 2. MENU KASIR                             --}}
+            {{-- ========================================== --}}
+            <li>
+                <a href="{{ url('cashier/dashboard') }}" class="{{ request()->is('cashier/dashboard') ? 'active' : '' }}">
+                    Dashboard
+                </a>
+            </li>
+            <li>
+                <a href="{{ url('order') }}" class="{{ request()->is('order*') ? 'active' : '' }}">
+                    Transaction Order
+                </a>
+            </li>
+            <li>
+                <a href="#" onclick="event.preventDefault(); document.getElementById('logout').submit();">
+                    Logout
+                </a>
+            </li>
+
             @else
-            {{-- Menu Admin --}}
-            <li><a href="{{ url('admin/dashboard') }}" class="{{ request()->is('admin/dashboard') ? 'active' : '' }}">Dashboard</a></li>
-            <li><a href="{{ route('product.index') }}" class="{{ request()->is('product*') ? 'active' : '' }}">Product</a></li>
-            <li><a href="{{ route('category.index') }}" class="{{ request()->is('category*') ? 'active' : '' }}">Category</a></li>
-            <li><a href="{{ url('role') }}" class="{{ request()->is('role*') ? 'active' : '' }}">Role</a></li>
+            {{-- ========================================== --}}
+            {{-- 3. MENU ADMIN                             --}}
+            {{-- ========================================== --}}
+            <li>
+                <a href="{{ url('admin/dashboard') }}" class="{{ request()->is('admin/dashboard') ? 'active' : '' }}">
+                    Dashboard
+                </a>
+            </li>
+            <li>
+                <a href="{{ url('role') }}" class="{{ request()->is('role*') ? 'active' : '' }}">
+                    Role
+                </a>
+            </li>
+            <li>
+                <a href="{{ route('product.index') }}" class="{{ request()->is('product*') ? 'active' : '' }}">
+                    Products
+                </a>
+            </li>
+            <li>
+                <a href="{{ route('category.index') }}" class="{{ request()->is('category*') ? 'active' : '' }}">
+                    Category
+                </a>
+            </li>
+            <li>
+                <a href="{{ route('setting') }}" class="{{ request()->is('setting*') ? 'active' : '' }}">
+                    Setting
+                </a>
+            </li>
+            <li>
+                <a href="#" onclick="event.preventDefault(); document.getElementById('logout').submit();">
+                    Logout
+                </a>
+            </li>
             @endif
 
-            {{-- Menu Umum / Logout --}}
-            <li><a href="{{ route('setting') }}" class="{{ request()->is('setting') ? 'active' : '' }}">Setting</a></li>
-            <li>
-                <a href="#" onclick="event.preventDefault(); document.getElementById('logout').submit();">Logout</a>
-            </li>
+            {{-- Form Logout (Hidden) --}}
             <form action="{{ route('logout') }}" id="logout" method="post" class="d-none">
                 @csrf
             </form>
